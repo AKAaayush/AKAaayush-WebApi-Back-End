@@ -3,13 +3,14 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const {check, validationResult} = require('express-validator');
 const jwt = require('jsonwebtoken');
-const Registration = require('../model/admin_model');
+const UserRegistration = require('../model/user_model');
+const { route } = require('./admin_route');
 
-// Add Admin
-router.post('/admin/add',
+// Add User
+router.post('/user/add',
 //validation
 [
-    check('email', "Invalid Emial Address ").isEmail(),
+    check('email', "Invalid Email Address ").isEmail(),
     check('name', "You must enter name").not().isEmpty(),
     check('address', "You must enter Address").not().isEmpty()
 ],
@@ -32,7 +33,7 @@ function(req,res){
 
         bcrypt.hash(password,10, function(err, hash){
             console.log(hash)
-            const me = new Registration({name : name,  address:address,  email:email, password:hash});
+            const me = new UserRegistration({name : name,  address:address,  email:email, password:hash});
             me.save()
             .then(function(result){
                 // success insert
@@ -49,4 +50,14 @@ function(req,res){
         
     }
 })
+
+//display
+router.get('/user/display', function(req,res){
+   
+    UserRegistration.find().then(function(data){
+        res.send(data)
+    
+    })
+})
+
 module.exports = router;

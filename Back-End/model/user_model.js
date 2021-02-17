@@ -1,5 +1,5 @@
 const mongoose = require('mongoose') // database connection
-const adminRegistration = mongoose.model('AdminDetails', {
+const userRegistration = mongoose.model('UserDetails', {
     name: {
         type: String,
         require: true,
@@ -32,4 +32,4 @@ const adminRegistration = mongoose.model('AdminDetails', {
 
 )
 
-module.exports = adminRegistration;
+module.exports = userRegistration;
