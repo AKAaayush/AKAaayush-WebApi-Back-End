@@ -15,6 +15,7 @@ router.post('/user/add',
     check('address', "You must enter Address").not().isEmpty()
 ],
 function(req,res){
+    console.log("HERE")
     const  errors = validationResult(req)
     console.log(errors.array())
     if(!errors.isEmpty()){
@@ -37,11 +38,11 @@ function(req,res){
             me.save()
             .then(function(result){
                 // success insert
-                res.status(201).json({a : "Registered success"});
+                res.status(200).json({success : true, a : "Registered success"});
 
             })
             .catch(function(err){
-                res.status(500).json({message : err})
+                res.status(201).json({  success : false, message : err})
             });
             console.log("Sucessfully Registered");
         })
@@ -50,6 +51,36 @@ function(req,res){
         
     }
 })
+
+router.post('/user/login', function(req,res){
+    const email = req.body.email
+    const password = req.body.password
+    console.log(req.body.email)
+    UserRegistration.findOne({email : email}).then(function(userData){
+        
+        if(userData==null){
+            return res.status(403).json({message : "Invalid User!!"})
+        }
+        bcrypt.compare(password,userData.password, function(err, result){
+            if(result==false){
+                return res.status(201).json({success:false,message : "Invalid User!!"})          
+              }
+            //   res.send("authenticated!!!")
+            const token = jwt.sign({userId :userData._id},'secretkey');
+            res.status(200).json({
+                success: true,
+                message: "login success",
+                token : token
+            })
+
+        })
+        
+    })
+    .catch()
+    
+
+})
+
 
 //display
 router.get('/user/display', function(req,res){
