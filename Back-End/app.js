@@ -6,10 +6,12 @@ const userroute = require('./route/user_route')
 const menuroute = require('./route/menu_route')
 const db = require('./database/database');
 const app = express();
+const path = require('path')
 const cors = require('cors')
 
 app.use(express.json());
 app.use(cors())
+app.use(express.static(path.join(__dirname, '/media')))
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(adminroute);
 app.use(menuroute);

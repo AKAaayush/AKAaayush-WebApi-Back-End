@@ -5,11 +5,13 @@ const {check, validationResult} = require('express-validator');
 const jwt = require('jsonwebtoken');
 const UserRegistration = require('../model/user_model');
 const { route } = require('./admin_route');
+const auth = require('../middleware/auth');
 
 // Add User
 router.post('/user/add',
 //validation
-[
+[   
+    
     check('email', "Invalid Email Address ").isEmail(),
     check('name', "You must enter name").not().isEmpty(),
     check('address', "You must enter Address").not().isEmpty()
@@ -28,16 +30,30 @@ function(req,res){
      else {
         
         const name = req.body.name
+        const phone = req.body.phone
+        const gender = req.body.gender
+        const dob = req.body.dob
         const address = req.body.address
         const email = req.body.email
         const password = req.body.password
 
         bcrypt.hash(password,10, function(err, hash){
             console.log(hash)
-            const me = new UserRegistration({name : name,  address:address,  email:email, password:hash});
+            const me = new UserRegistration({
+                
+                name : name, 
+                dob : dob, 
+                phone : phone, 
+                gender: gender,  
+                address:address,  
+                email:email, 
+                password:hash
+            });
+           
             me.save()
             .then(function(result){
                 // success insert
+                console.log("here")
                 res.status(200).json({success : true, a : "Registered success"});
 
             })
@@ -50,6 +66,10 @@ function(req,res){
     
         
     }
+})
+//function for Login Function
+router.get('/checklogin', function(req,res){
+    res.send(req.user)
 })
 
 router.post('/user/login', function(req,res){
@@ -80,7 +100,6 @@ router.post('/user/login', function(req,res){
     
 
 })
-
 
 //display
 router.get('/user/display', function(req,res){

@@ -11,7 +11,7 @@ router.post('/addmenu',upload.single('menu_image'),function(req, res){
     const menu_desc = req.body.menu_desc
     const menu_image = req.body.menu_image
 
-    const menu = new menuAdd({menu_name : menu_name, menu_title: menu_title, menu_price:menu_price, menu_desc:menu_desc, menu_image : req.file.path})
+    const menu = new menuAdd({menu_name : menu_name, menu_title: menu_title, menu_price:menu_price, menu_desc:menu_desc, menu_image : req.file.filename})
     menu.save()
 
     .then(function(result){
