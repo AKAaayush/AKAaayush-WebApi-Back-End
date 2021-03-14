@@ -67,6 +67,7 @@ function(req,res){
         
     }
 })
+
 //function for Login Function
 router.get('/checklogin', function(req,res){
     res.send(req.user)
@@ -92,7 +93,8 @@ router.post('/user/login', function(req,res){
                 message: "login success",
                 token : token
             })
-
+            console.log("HERE")
+ 
         })
         
     })
@@ -109,5 +111,9 @@ router.get('/user/display', function(req,res){
     
     })
 })
+
+
+
+
 
 module.exports = router;

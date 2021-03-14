@@ -49,4 +49,28 @@ function(req,res){
         
     }
 })
+
+router.put('/admin/update', function(req,res){
+    const name = req.body.name
+    const address = req.body.address
+    const email = req.body.email
+    const id = req.body.id
+
+    Registration.updateOne({_id : id}, {
+        name:name,
+        address:address,
+        email:email
+    }
+      )
+    .then(function(result){
+      res.status(200).json({message:"Menu Updated",success: true,})
+    })
+    console.log("here")
+    .catch(function(e){
+      res.status(500).json({
+        message:e,success: false
+      })
+    })
+
+  })
 module.exports = router;
