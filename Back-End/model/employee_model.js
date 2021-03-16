@@ -1,50 +1,39 @@
-const mongose = require('mongoose')
-
-const employeeDetails = mongose.model('employeeDetails',{
-    employe_name: {
-        type: String,
-        require: true,
-        trim: true
-    },
-
-    employe_address: {
+const mongoose = require('mongoose') // database connection
+const employeeadd = mongoose.model('employeeDetails',{
+    employee_name: {
         type: String,
         trim: true
     },
-    employe_phone:{
+
+    employee_address: {
+        type: String,
+        trim: true
+    },
+    employee_phone:{
         type:String,
-        require:true,
         trim :true
     },
-    employe_gender: {
+    employee_gender: {
         type: String,
-        require: true,
+
         trim: true
     },
-    employe_dob: {
+    employee_dob: {
         type: String,
-        require: true,
         trim: true
     },
-    employe_email: {
-        type: String,
-        require: true,
-        unique: true
+    employee_email: {
+        type: String
+      
     }
     ,
-    employe_password: {
-        type: String,
-        require: true,
-        trim: true
-    },
+    employee_image:{
+        type:String,
+    }
 
-    // tokens: [{
-    //     token: {
-    //         type: String,
-    //     }
-    // }]
+  
 }
-    
 ) 
 
-module.exports=employeeDetails
+
+module.exports=employeeadd

@@ -1,6 +1,4 @@
 const mongoose = require('mongoose') // database connection
-const upload = require ('../middleware/upload')
-
 const menuAdd = mongoose.model('MenuDetails', {
 
     menu_name: {
@@ -24,8 +22,7 @@ const menuAdd = mongoose.model('MenuDetails', {
     }
     ,
     menu_image: {
-        type: String,
-        require: true,
+        type: String
      
     }
 
