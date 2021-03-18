@@ -11,6 +11,8 @@ const adminroute = require('./route/admin_route');
 const userroute = require('./route/user_route')
 const menuroute = require('./route/menu_route')
 const employeeroute = require('./route/employee_route');
+const fooditemroute = require('./route/foodItem_route');
+
 
 
 
@@ -24,6 +26,7 @@ app.use(adminroute);
 app.use(menuroute);
 app.use(userroute);
 app.use(employeeroute)
+app.use(fooditemroute)
 
 
 //localhost port

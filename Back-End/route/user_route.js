@@ -69,8 +69,12 @@ function(req,res){
 })
 
 //function for Login Function
-router.get('/checklogin', function(req,res){
+router.get('/checklogin', function(req,res) {
     res.send(req.user)
+    // UserRegistration.find().then(function(data){
+    //     res.send(data)
+    
+    // })
 })
 
 router.post('/user/login', function(req,res){
@@ -101,6 +105,20 @@ router.post('/user/login', function(req,res){
     .catch()
     
 
+})
+
+//get one user by _id
+router.get('/user/display/:id', function(req, res){
+    const id = req.params.id
+    UserRegistration.findOne({_id : id})
+    .then(function(data){
+        res.status(200).json(data);
+        console.log(data)
+    })
+
+    .catch(function(e){
+        res.status(500).json({message:e})
+    })
 })
  
 //display
