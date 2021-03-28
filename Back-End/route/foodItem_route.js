@@ -2,19 +2,21 @@ const express = require('express'); //third party
 const router = express.Router();
 const upload = require ('../middleware/upload');
 const foodItem = require('../model/foodItem_model');
-
+const auth = require("../middleware/auth")
 //adding  FoodItems
 router.post('/foodadd', upload.single('food_image'), function(req, res){
 
     const food_name = req.body.food_name
     const food_price = req.body.food_price
     const food_desc =req.body.food_desc
+    const userId = req.body.userId;
     
     const food = new foodItem({
         food_name : food_name,
         food_price : food_price,
         food_desc : food_desc,
-        food_image : req.file.filename
+        food_image : req.file.filename,
+        userId: userId
     })
     food.save()
     .then(function(result){
@@ -39,5 +41,17 @@ router.get('/fooditem/display',function(req,res){
         res.status(500).json({ success: false, message: error });
       });
 })
+
+router.get('/food/:id',
+    auth.verifyUser,
+     (req, res) => {
+        const id = req.params.id
+        foodItem.find({ _id: id }).then(function (result) {
+            console.log(result)
+            res.status(200).json({ success: true, result: result })
+        }).catch(function (e) {
+            res.status(201).json({ success: false, message: "something went wrong" })
+        })
+    })
 
 module.exports = router;

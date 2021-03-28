@@ -19,6 +19,7 @@ const userRegistration = mongoose.model('UserDetails', {
         type: String,
         require: true,
         trim: true
+        
     },
     dob: {
         type: String,
@@ -37,11 +38,12 @@ const userRegistration = mongoose.model('UserDetails', {
         trim: true
     },
 
-    // tokens: [{
-    //     token: {
-    //         type: String,
-    //     }
-    // }]
+
+    tokens: [{
+        token: {
+            type: String,
+        }
+    }]
 }
 
 )

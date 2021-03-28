@@ -70,14 +70,14 @@ function(req,res){
 
 //function for Login Function
 router.get('/checklogin', function(req,res) {
-    res.send(req.user)
-    // UserRegistration.find().then(function(data){
-    //     res.send(data)
+    // res.send(req.data)
+    UserRegistration.find().then(function(data){
+        res.send(data)
     
-    // })
+    })
 })
 
-router.post('/user/login', function(req,res){
+router.post('/user/login',function(req,res){
     const email = req.body.email
     const password = req.body.password
     console.log(req.body.email)
@@ -95,29 +95,35 @@ router.post('/user/login', function(req,res){
             res.status(200).json({
                 success: true,
                 message: "login success",
-                token : token
+                token : token,
+                id:userData._id
             })
             console.log("HERE")
  
         })
         
     })
-    .catch()
+    .catch(function(e){
+        res.send(e)
+    })
     
 
 })
 
 //get one user by _id
 router.get('/user/display/:id', function(req, res){
+    console.log("In api")
     const id = req.params.id
+    console.log(req.params.id)
+
     UserRegistration.findOne({_id : id})
     .then(function(data){
-        res.status(200).json(data);
+        res.status(200).json({success:true, data: data});
         console.log(data)
     })
 
     .catch(function(e){
-        res.status(500).json({message:e})
+        res.status(500).json({success: false, message:e})
     })
 })
  
@@ -130,6 +136,19 @@ router.get('/user/display', function(req,res){
     })
 })
 
+
+//logout
+router.delete('/user/logout', function(req,res){
+    res.cookie('token', 'none', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+    });
+    
+    res.status(200).json({
+    success: true,
+    data: 'customer Logged out',
+    });
+   });
 
 
 

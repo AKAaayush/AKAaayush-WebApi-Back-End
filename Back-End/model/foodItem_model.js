@@ -19,8 +19,16 @@ const foodItem = mongoose.model('FoodDetails', {
     food_image: {
         type: String
      
-    }
+    },
 
+    // foodID : {
+    //     type : String,
+    //     require: true
+    // }
+    userId:{
+        type:String,
+        required:true
+    }
   
 }
 
