@@ -69,7 +69,7 @@ function(req,res){
 })
 
 //function for Login Function
-router.get('/checklogin', function(req,res) {
+router.get('/checklogin',auth.verifyUser, function(req,res) {
     // res.send(req.data)
     UserRegistration.find().then(function(data){
         res.send(data)
@@ -88,10 +88,14 @@ router.post('/user/login',function(req,res){
         }
         bcrypt.compare(password,userData.password, function(err, result){
             if(result==false){
-                return res.status(201).json({success:false,message : "Invalid User!!"})          
+                const token = ""  
+                console.log(token)  
+                return res.status(201).json({success:false,message : "Invalid User!!", token: token}) 
+                    
               }
             //   res.send("authenticated!!!")
-            const token = jwt.sign({userId :userData._id},'secretkey');
+  
+   const token = jwt.sign({userId :userData._id},'secretkey' );
             res.status(200).json({
                 success: true,
                 message: "login success",

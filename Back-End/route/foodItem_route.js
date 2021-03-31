@@ -54,4 +54,30 @@ router.get('/food/:id',
         })
     })
 
+    //search
+    router.get("/search", async (req, res) => {
+        // create query object to hold search value and category value
+        const query = {};
+        // assign search value to query.name
+        if (req.query.search) {
+            query.name = {
+                $regex: req.query.search,
+                $options: 'i'
+            };
+            // assigne category value to query.category
+            if (req.query.category && req.query.category != 'All') {
+                query.category = req.query.category;
+            }
+        }
+        try {
+            let products = await foodItem.find(query).select('-photo');
+            res.json(products);
+    
+        } catch (error) {
+            console.log(error)
+            res.status(500).send('Error to get products')
+        }
+    
+    })
+
 module.exports = router;

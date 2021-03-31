@@ -6,7 +6,7 @@ const auth = require('../middleware/auth')
 
 //adding menu
 // upload.single('menu_image')
-router.post('/addmenu',function(req, res) {
+router.post('/addmenu', upload.single('menu_image'),function(req, res) {
 
     const menu_name = req.body.menu_name
     const menu_title = req.body.menu_title
@@ -14,7 +14,7 @@ router.post('/addmenu',function(req, res) {
     const menu_desc = req.body.menu_desc
     const menu_image = req.body.menu_image
 
-    const menu = new menuAdd({menu_name : menu_name, menu_title: menu_title, menu_price:menu_price, menu_desc:menu_desc, menu_image : menu_image })
+    const menu = new menuAdd({menu_name : menu_name, menu_title: menu_title, menu_price:menu_price, menu_desc:menu_desc,menu_image : req.file.filename })
     // menu_image : req.file.filename
     menu.save()
 
@@ -55,9 +55,24 @@ router.get('/menu/display', function(req,res){
       })
   
       .catch(function(e){
+        
           res.status(500).json({message:e})
       })
   })
+
+  router.get('/menu/name/:menu_name', function(req,res){
+    const menu_name = req.params.menu_name;  
+    menuAdd.findOne({menu_name : menu_name })
+    .then(function(data){
+      console.log(data)
+        res.status(200).json(data);
+    })
+
+    .catch(function(e){
+      console.log('here')
+        res.status(500).json({message:e})
+    })
+})
 
 
     //MENU EDIT

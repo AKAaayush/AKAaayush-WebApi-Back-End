@@ -3,7 +3,9 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const {check, validationResult} = require('express-validator');
 const jwt = require('jsonwebtoken');
-const Registration = require('../model/admin_model');
+const Admin = require('../model/admin_model');
+const auth = require('../middleware/auth');
+
 
 // Add Admin
 router.post('/admin/add',
@@ -32,7 +34,7 @@ function(req,res){
 
         bcrypt.hash(password,10, function(err, hash){
             console.log(hash)
-            const me = new Registration({name : name,  address:address,  email:email, password:hash});
+            const me = new Admin({name : name,  address:address,  email:email, password:hash});
             me.save()
             .then(function(result){
                 // success insert
@@ -50,13 +52,53 @@ function(req,res){
     }
 })
 
+//admin login
+router.post('/admin/login',function(req,res){
+  const email = req.body.email
+  const password = req.body.password
+  console.log(req.body.email)
+  Admin.findOne({email : email})
+
+  .then(function(AdminData){
+      
+      if(AdminData==null){
+          return res.status(403).json({message : "Invalid User!!"})
+      }
+      bcrypt.compare(password,AdminData.password, function(err, result){
+          if(result==false){
+              const token = ""  
+              console.log(token)  
+              return res.status(201).json({success:false,message : "Invalid User!!", token: token}) 
+                  
+            }
+          //   res.send("authenticated!!!")
+
+ const token = jwt.sign({adminId :AdminData._id},'secretkey' );
+          res.status(200).json({
+              success: true,
+              message: "login success",
+              token : token,
+              id:AdminData._id
+          })
+          console.log("HERE")
+
+      })
+      
+  })
+  .catch(function(e){
+      res.send(e)
+  })
+  
+
+})
+
 router.put('/admin/update', function(req,res){
     const name = req.body.name
     const address = req.body.address
     const email = req.body.email
     const id = req.body.id
 
-    Registration.updateOne({_id : id}, {
+    Admin.updateOne({_id : id}, {
         name:name,
         address:address,
         email:email
