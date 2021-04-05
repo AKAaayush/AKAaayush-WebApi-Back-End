@@ -177,5 +177,9 @@ router.put('/admin/update', function(req,res){
         res.send(req.user)
     
     
+
+
 })
+//admin logout
+// router.delete('/logout')
 module.exports = router;

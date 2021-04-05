@@ -52,30 +52,23 @@ const Admin = require('../model/admin_model') // user model
 // }
 
 
-module.exports.verifyUser = function(req,res,next){
-    try{
-        console.log(req.headers.authorization)
-        const token = req.headers.authorization.split(" ")[1];
-        // console.log(token)
-        const decodeData = jwt.verify(token, 'secretkey')
-        User.findOne({_id : decodeData.userId})
-        .them(function(result){
-            //success
-            req.user = result
-            next()
-           
-        })
-        .catch(function(err){
-            console.log(err)
- 
-            res.status(401).json({message : err})
-        })
+module.exports.verifyUser = async(req,res,next) =>{
+    try {
+     console.log(req.header('Authorization'))
+    const token = req.header('Authorization').replace('Bearer ', '')
+    const decoded = jwt.verify(token, 'thisismynewcourse')
+    const user = await User.findOne({ _id: decoded._id, 'tokens.token': token
+   })
+    if (!user) {
+    throw new Error()
     }
-    catch(err){
-            console.log(err)
- 
-        res.status(401).json({message : "Unauthorized access!!"})
+    req.token = token
+    req.user = user
+    next()
+    } catch (e) {
+    res.status(401).send({ error: 'Please authenticate.' })
     }
+    
 }
  
 module.exports.verifyAdmin=  async (req, res, next) => {

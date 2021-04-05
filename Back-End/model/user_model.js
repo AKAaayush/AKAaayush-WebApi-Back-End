@@ -1,5 +1,7 @@
 const mongoose = require('mongoose') // database connection
-const userRegistration = mongoose.model('UserDetails', {
+const jwt = require('jsonwebtoken') //Auth Token handle
+const bcrypt = require('bcryptjs')
+const user = new mongoose.Schema( {
     name: {
         type: String,
         require: true,
@@ -47,5 +49,28 @@ const userRegistration = mongoose.model('UserDetails', {
 }
 
 )
+user.statics.checkCrediantialsDb = async (email, password) => {
 
-module.exports = userRegistration;
+    const user = await users.findOne({email: email} )
+    if (!user) {
+        console.log('user not found')
+    }
+    const isPasswordMatch = await bcrypt.compare(password, user.password)
+    if (!isPasswordMatch) {
+        throw new Error('Invalid login credentials')
+    }
+    return user
+ 
+}
+// login token generate function
+user.methods.generateAuthToken = async function () {
+    const userAuth = this
+    const token = jwt.sign({ _id: userAuth._id.toString() }, 'thisismynewcourse')
+ 
+    console.log(token);
+    userAuth.tokens = userAuth.tokens.concat({ token: token })
+    await userAuth.save()
+    return token
+}
+const users = mongoose.model('UserDetails', user)
+module.exports = users;

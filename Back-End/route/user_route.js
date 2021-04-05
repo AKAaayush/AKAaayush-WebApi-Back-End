@@ -69,51 +69,101 @@ function(req,res){
 })
 
 //function for Login Function
-router.get('/checklogin',auth.verifyUser, function(req,res) {
-    // res.send(req.data)
-    UserRegistration.find().then(function(data){
-        res.send(data)
-    
-    })
+router.get('/checkuserlogin',auth.verifyUser, async function(req,res) {
+  // res.send(req.data)
+ 
+      res.send(req.user)
+  
+  
+
+
 })
 
-router.post('/user/login', function (req, res) {
-    const email = req.body.email
-    const password = req.body.password
+// router.post('/user/login', function (req, res) {
+//     const email = req.body.email
+//     const password = req.body.password
   
-    UserRegistration.findOne({ email: email })
-      .then(function (userData) {
-        if(userData==null){
-          console.log("Invalid User")
-            return res.status(403).json({success: false, message : "Invalid User!!"})
+//     UserRegistration.findOne({ email: email })
+//       .then(function (userData) {
+//         if(userData==null){
+//           console.log("Invalid User")
+//             return res.status(403).json({success: false, message : "Invalid User!!"})
             
-        }
-        bcrypt.compare(password, userData.password, function (err, result) {
-          if (result == false) {
-            const token= "";
-            return res.status(403).json({ success: false, message: "Invalid Admin!!", token:token })
-          }
-          //   res.send("authenticated!!!")
-          const token = jwt.sign({ userId: userData._id }, 'secretkey');
-          console.log(userData._id)
-          res.status(200).json({
-            success: true,
-            message: " login success",
-            token: token,
-            id: userData._id
-          })
+//         }
+//         bcrypt.compare(password, userData.password, function (err, result) {
+//           if (result == false) {
+//             const token= "";
+//             return res.status(403).json({ success: false, message: "Invalid Admin!!", token:token })
+//           }
+//           //   res.send("authenticated!!!")
+//           const token = jwt.sign({ userId: userData._id }, 'secretkey');
+//           console.log(userData._id)
+//           res.status(200).json({
+//             success: true,
+//             message: " login success",
+//             token: token,
+//             id: userData._id
+//           })
   
-        })
+//         })
   
-      })
-      .catch(function(e){
-        console.log("Invalid User")
+//       })
+//       .catch(function(e){
+//         console.log("Invalid User")
 
+//       })
+  
+  
+  
+//   })
+
+
+router.post('/user/login', async function (req, res) {
+    try{
+      const email = req.body.email
+      const password = req.body.password
+      const Users = await UserRegistration.checkCrediantialsDb(email,
+        password)
+    const token = await Users.generateAuthToken()
+        res.status(200).json({
+          success: true,
+          message: "user login success",
+          token: token,
+          id: Users._id
+        })
+      }
+      catch(e){
+        res.status(200).json({
+          success:false,
+          message:"invalid credential"
+        })
+      }
+    })
+  
+  router.put('/admin/update', function(req,res){
+      const name = req.body.name
+      const address = req.body.address
+      const email = req.body.email
+      const id = req.body.id
+  
+      Admin.updateOne({_id : id}, {
+          name:name,
+          address:address,
+          email:email
+      }
+        )
+      .then(function(result){
+        res.status(200).json({message:"Menu Updated",success: true,})
+      })
+      console.log("here")
+      .catch(function(e){
+        res.status(500).json({
+          message:e,success: false
+        })
       })
   
+    })
   
-  
-  })
 
 //get one user by _id
 router.get('/user/display/:id', function(req, res){
@@ -140,6 +190,9 @@ router.get('/user/display', function(req,res){
     
     })
 })
+
+//user logout
+
 
 
 //logout
