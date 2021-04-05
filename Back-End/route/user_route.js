@@ -77,42 +77,43 @@ router.get('/checklogin',auth.verifyUser, function(req,res) {
     })
 })
 
-router.post('/user/login',function(req,res){
+router.post('/user/login', function (req, res) {
     const email = req.body.email
     const password = req.body.password
-    console.log(req.body.email)
-    UserRegistration.findOne({email : email}).then(function(userData){
-        
-        if(userData==null){
-            return res.status(403).json({message : "Invalid User!!"})
-        }
-        bcrypt.compare(password,userData.password, function(err, result){
-            if(result==false){
-                const token = ""  
-                console.log(token)  
-                return res.status(201).json({success:false,message : "Invalid User!!", token: token}) 
-                    
-              }
-            //   res.send("authenticated!!!")
   
-   const token = jwt.sign({userId :userData._id},'secretkey' );
-            res.status(200).json({
-                success: true,
-                message: "login success",
-                token : token,
-                id:userData._id
-            })
-            console.log("HERE")
- 
+    UserRegistration.findOne({ email: email })
+      .then(function (userData) {
+        if(userData==null){
+          console.log("Invalid User")
+            return res.status(403).json({success: false, message : "Invalid User!!"})
+            
+        }
+        bcrypt.compare(password, userData.password, function (err, result) {
+          if (result == false) {
+            const token= "";
+            return res.status(403).json({ success: false, message: "Invalid Admin!!", token:token })
+          }
+          //   res.send("authenticated!!!")
+          const token = jwt.sign({ userId: userData._id }, 'secretkey');
+          console.log(userData._id)
+          res.status(200).json({
+            success: true,
+            message: " login success",
+            token: token,
+            id: userData._id
+          })
+  
         })
-        
-    })
-    .catch(function(e){
-        res.send(e)
-    })
-    
+  
+      })
+      .catch(function(e){
+        console.log("Invalid User")
 
-})
+      })
+  
+  
+  
+  })
 
 //get one user by _id
 router.get('/user/display/:id', function(req, res){

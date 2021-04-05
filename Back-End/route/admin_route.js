@@ -53,44 +53,98 @@ function(req,res){
 })
 
 //admin login
-router.post('/admin/login',function(req,res){
-  const email = req.body.email
-  const password = req.body.password
-  console.log(req.body.email)
-  Admin.findOne({email : email})
+// router.post('/admin/login',function(req,res){
+//   const email = req.body.email
+//   const password = req.body.password
+//   // console.log(req.body.email)
 
-  .then(function(AdminData){
-      
-      if(AdminData==null){
-          return res.status(403).json({message : "Invalid User!!"})
-      }
-      bcrypt.compare(password,AdminData.password, function(err, result){
-          if(result==false){
-              const token = ""  
-              console.log(token)  
-              return res.status(201).json({success:false,message : "Invalid User!!", token: token}) 
+//   Admin.findOne({email : email})
+//   .then(function(AdminData){
+//       if(AdminData==null){
+//           return res.status(403).json({message : "Invalid User!!"})
+//       }
+//       bcrypt.compare(password,AdminData.password, function(err, result){
+//           if(result==false){
+//               const token = ""  
+//               console.log(token)  
+//               return res.status(201).json({success:false,message : "Invalid User!!", token: token}) 
                   
-            }
-          //   res.send("authenticated!!!")
+//             }
+//           //   res.send("authenticated!!!")
 
- const token = jwt.sign({adminId :AdminData._id},'secretkey' );
-          res.status(200).json({
-              success: true,
-              message: "login success",
-              token : token,
-              id:AdminData._id
-          })
-          console.log("HERE")
+//  const token = jwt.sign({adminId :AdminData._id},'secretkey' );
+//           res.status(200).json({
+//               success: true,
+//               message: "login success",
+//               token : token,
+//               id:AdminData._id
+//           })
+//           // console.log("HERE")
 
-      })
+//       })
       
-  })
-  .catch(function(e){
-      res.send(e)
-  })
+//   })
+//   .catch(function(e){
+//       res.send(e)
+//   })
   
 
-})
+// })
+// router.post('/admin/login', function (req, res) {
+//   const email = req.body.email
+//   const password = req.body.password
+
+//   Admin.findOne({ email: email })
+//     .then(function (userData) {
+//       if(userData==null){
+//         console.log("Invalid User")
+//           return res.status(403).json({success: false, message : "Invalid User!!"})
+          
+//       }
+//       bcrypt.compare(password, userData.password, function (err, result) {
+//         if (result == false) {
+//           const token= "";
+//           return res.status(403).json({ success: false, message: "Invalid Admin!!", token:token })
+//         }
+//         //   res.send("authenticated!!!")
+//         const token = jwt.sign({ userId: userData._id }, 'secretkey');
+//         console.log(userData._id)
+//         res.status(200).json({
+//           success: true,
+//           message: "admin login success",
+//           token: token,
+//           id: userData._id
+//         })
+
+//       })
+
+//     })
+//     .catch()
+
+
+
+// })
+router.post('/admin/login', async function (req, res) {
+  try{
+    const email = req.body.email
+    const password = req.body.password
+    const Users = await Admin.checkCrediantialsDb(email,
+      password)
+  const token = await Users.generateAuthToken()
+      res.status(200).json({
+        success: true,
+        message: "admin login success",
+        token: token,
+        id: Users._id
+      })
+    }
+    catch(e){
+      res.status(200).json({
+        success:false,
+        message:"invalid credential"
+      })
+    }
+  })
 
 router.put('/admin/update', function(req,res){
     const name = req.body.name
@@ -115,4 +169,13 @@ router.put('/admin/update', function(req,res){
     })
 
   })
+
+  // Admin profile check
+  router.get('/checklogin',auth.verifyAdmin, async function(req,res) {
+    // res.send(req.data)
+   
+        res.send(req.user)
+    
+    
+})
 module.exports = router;

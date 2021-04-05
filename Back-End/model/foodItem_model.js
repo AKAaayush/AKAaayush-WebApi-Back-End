@@ -25,10 +25,10 @@ const foodItem = mongoose.model('FoodDetails', {
     //     type : String,
     //     require: true
     // }
-    userId:{
-        type:String,
-        required:true
-    }
+    // userId:{
+    //     type:String,
+    //     required:true
+    // }
   
 }
 
