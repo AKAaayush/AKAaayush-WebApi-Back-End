@@ -4,8 +4,10 @@ const bcrypt = require('bcryptjs');
 const {check, validationResult} = require('express-validator');
 const jwt = require('jsonwebtoken');
 const UserRegistration = require('../model/user_model');
+const upload = require ('../middleware/upload');
 const { route } = require('./admin_route');
 const auth = require('../middleware/auth');
+var ObjectID = require('mongodb').ObjectID; 
 
 // Add User
 router.post('/user/add',
@@ -35,6 +37,7 @@ function(req,res){
         const dob = req.body.dob
         const address = req.body.address
         const email = req.body.email
+        const image = req.body.image
         const password = req.body.password
 
         bcrypt.hash(password,10, function(err, hash){
@@ -47,6 +50,7 @@ function(req,res){
                 gender: gender,  
                 address:address,  
                 email:email, 
+                image:image,
                 password:hash
             });
            
@@ -133,37 +137,38 @@ router.post('/user/login', async function (req, res) {
         })
       }
       catch(e){
+        const token = ""
         res.status(200).json({
           success:false,
-          message:"invalid credential"
+          message:"invalid credential",
+          token: token
         })
       }
     })
-  
-  router.put('/admin/update', function(req,res){
-      const name = req.body.name
-      const address = req.body.address
-      const email = req.body.email
-      const id = req.body.id
-  
-      Admin.updateOne({_id : id}, {
-          name:name,
-          address:address,
-          email:email
-      }
-        )
-      .then(function(result){
-        res.status(200).json({message:"Menu Updated",success: true,})
-      })
-      console.log("here")
-      .catch(function(e){
-        res.status(500).json({
-          message:e,success: false
+  // Update user
+  router.put('/user/update/:_id',auth.verifyUser, function(req,res){
+    console.log(req.body);
+    console.log(req.params._id)
+    UserRegistration.findOneAndUpdate({_id:ObjectID(req.params._id)}, req.body).then(function () {
+        res.status(200).send().catch(function (e) {
+            res.status(400).send()
         })
-      })
-  
     })
   
+    })
+// Update Image
+ router.put('/updateProfile/:_id',auth.verifyUser,upload.single('image'),function(req,res){
+
+      const User = {
+          image: req.file.filename
+      }
+      UserRegistration.findOneAndUpdate({_id:ObjectID(req.params._id)}, User).then(function () {
+          res.status(200).send().catch(function (e) {
+              res.status(400).send()
+          })
+      })
+  
+})
 
 //get one user by _id
 router.get('/user/display/:id', function(req, res){
@@ -192,7 +197,27 @@ router.get('/user/display', function(req,res){
 })
 
 //user logout
+router.delete('/logout/user', auth.verifyUser, function(req,res){
+  
+  UserRegistration.findById(req.user._id, function(err, userdata){
+    console.log(req.token)
+  var  deletetoken = {token : req.token}
+  var  delete1 = userdata.tokens.splice(userdata.tokens.indexOf(deletetoken), 1);
+    userdata.tokens= userdata.tokens.pull(delete1[0]._id)
+    console.log(userdata.tokens)
+    userdata.save((err, data) => {
+        if(err) return res.send({
+            success : false,
+            message : err.message
+        })
+    })
+    return res.send({
+        success : true,
+        message : "Logged Out",
 
+    })
+})
+})
 
 
 //logout

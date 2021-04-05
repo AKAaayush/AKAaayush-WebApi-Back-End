@@ -39,6 +39,11 @@ const user = new mongoose.Schema( {
         require: true,
         trim: true
     },
+    image:{
+        type:String,
+        trim:true,
+        default:'pending'
+    },
 
 
     tokens: [{
