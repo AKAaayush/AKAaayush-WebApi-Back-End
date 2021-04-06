@@ -180,6 +180,29 @@ router.put('/admin/update', function(req,res){
 
 
 })
+
+//user logout
+router.delete('/logout/admin', auth.verifyAdmin, function(req,res){
+  
+  Admin.findById(req.user._id, function(err, userdata){
+    console.log(req.token)
+  var  deletetoken = {token : req.token}
+  var  delete1 = userdata.tokens.splice(userdata.tokens.indexOf(deletetoken), 1);
+    userdata.tokens= userdata.tokens.pull(delete1[0]._id)
+    console.log(userdata.tokens)
+    userdata.save((err, data) => {
+        if(err) return res.send({
+            success : false,
+            message : err.message
+        })
+    })
+    return res.send({
+        success : true,
+        message : "Logged Out",
+
+    })
+})
+})
 //admin logout
 // router.delete('/logout')
 module.exports = router;

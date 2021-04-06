@@ -2,14 +2,13 @@ const express = require('express'); //third party
 const router = express.Router();
 const upload = require ('../middleware/upload');
 const employeeadd = require('../model/employee_model')
+const auth = require("../middleware/auth")
 
 //adding new employee
-router.post('/addemployee', upload.single('employee_image'),function(req,res){
+router.post('/addemployee',auth.verifyAdmin, upload.single('employee_image'),function(req,res){
 
     const employee_name = req.body.employee_name
     const employee_phone = req.body.employee_phone
-    const employee_gender = req.body.employee_gender
-    const employee_dob = req.body.employee_dob
     const employee_address = req.body.employee_address
     const employee_email = req.body.employee_email
    
@@ -17,8 +16,6 @@ router.post('/addemployee', upload.single('employee_image'),function(req,res){
    const employee = new employeeadd({
         employee_name : employee_name,
         employee_phone : employee_phone,
-        employee_gender : employee_gender,
-        employee_dob : employee_dob,
         employee_address : employee_address,
         employee_email : employee_email,
         employee_image : req.file.filename
@@ -51,23 +48,34 @@ router.get('/employee/display', function(req,res){
     })
 })
 
+// eployee single
+router.get('/employee/single/:id', function(req,res){
+    const id = req.params.id;  
+    employeeadd.findOne({_id : id })
+    .then(function(data){
+        res.status(200).json(data);
+    })
+
+    .catch(function(e){
+      
+        res.status(500).json({message:e})
+    })
+})
+
 //Employee Update
-router.put('/employee/update', upload.single('employee_image'), function(req,res){
+router.put('/employee/update/:id', upload.single('employee_image'), function(req,res){
     const employee_name = req.body.employee_name
     const employee_phone = req.body.employee_phone
-    const employee_gender = req.body.employee_gender
-    const employee_dob = req.body.employee_dob
     const employee_address = req.body.employee_address
     const employee_email = req.body.employee_email
-    const id = req.body.id
+    const id = req.params.id
 
     employeeadd.updateOne({_id : id},{
         employee_name : employee_name,
         employee_phone : employee_phone,
-        employee_gender : employee_gender,
-        employee_dob :employee_dob,
         employee_address : employee_address,
-        employee_email : employee_email
+        employee_email : employee_email,
+        employee_image : req.file.filename
     })
     .then(function(result){
         res.status(200).json({success :true, message :"Employee Detail Updated.."})
@@ -78,5 +86,20 @@ router.put('/employee/update', upload.single('employee_image'), function(req,res
         res.status(500).json({success:false, message : e})
     })
 })
+   //delete food details
+   router.delete('/employee/delete/:id',function(req, res){
+    const id = req.params.id
+    employeeadd.deleteOne({_id:id})
+    .then(function(result){
+      console.log("Deleted!!")
+      res.status(200).json({a : "deleted successfully", success : true});
+      
 
+  })
+  .catch(function(err){
+    console.log("here")
+      res.status(500).json({message : err})
+  })
+
+  })
 module.exports = router;

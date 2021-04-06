@@ -1,6 +1,9 @@
 const mongoose=require('mongoose')
+var now = new Date();
 const checkout = mongoose.model('CheckOutDetails', {
     userId:{
+        type: mongoose.Schema.ObjectId,
+        ref :'UserDetails',
         type:String,
         required:true
     },
@@ -12,6 +15,11 @@ const checkout = mongoose.model('CheckOutDetails', {
     quantity:{
         type:String,
         required:true
+    },
+    
+    date:{
+        type : Date, 
+        default: now 
     }
 }],
 delivery_status:{

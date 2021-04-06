@@ -13,6 +13,8 @@ const menuroute = require('./route/menu_route')
 const employeeroute = require('./route/employee_route');
 const fooditemroute = require('./route/foodItem_route');
 const checkoutroute = require('./route/checkout_route');
+const tableroute = require('./route/table _route');
+
 
 
 
@@ -28,6 +30,8 @@ app.use(checkoutroute);
 app.use(userroute);
 app.use(employeeroute)
 app.use(fooditemroute)
+app.use(tableroute)
+
 
 
 //localhost port

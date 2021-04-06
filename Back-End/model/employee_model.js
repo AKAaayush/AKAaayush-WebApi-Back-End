@@ -13,15 +13,7 @@ const employeeadd = mongoose.model('employeeDetails',{
         type:String,
         trim :true
     },
-    employee_gender: {
-        type: String,
-
-        trim: true
-    },
-    employee_dob: {
-        type: String,
-        trim: true
-    },
+   
     employee_email: {
         type: String
       

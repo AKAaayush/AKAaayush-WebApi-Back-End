@@ -67,7 +67,7 @@ router.get('/fooditem/display',function(req,res){
         res.status(500).json({ success: false, message: error });
       });
 })
-router.get('/food/single/:id', function(req,res){
+router.get('/food/single/:id',auth.verifyAdmin, function(req,res){
     const id = req.params.id;  
     foodItem.findOne({_id : id })
     .then(function(data){

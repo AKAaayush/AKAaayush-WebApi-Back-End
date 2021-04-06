@@ -156,9 +156,29 @@ router.post('/user/login', async function (req, res) {
     })
   
     })
+
+
+
+  //delete food details
+router.delete('/user/delete/:id',auth.verifyAdmin,function(req, res){
+    const id = req.params.id
+    UserRegistration.deleteOne({_id:id})
+    .then(function(result){
+      console.log("Deleted!!")
+      res.status(200).json({a : "deleted successfully", success : true});
+      
+
+  })
+  .catch(function(err){
+    console.log("here")
+      res.status(500).json({message : err})
+  })
+
+  })
+
 // Update Image
  router.put('/updateProfile/:_id',auth.verifyUser,upload.single('image'),function(req,res){
-
+try{
       const User = {
           image: req.file.filename
       }
@@ -167,6 +187,11 @@ router.post('/user/login', async function (req, res) {
               res.status(400).send()
           })
       })
+    }
+    catch{
+      console.log("profile pic not updated")
+
+    }
   
 })
 
@@ -195,7 +220,22 @@ router.get('/user/display', function(req,res){
     
     })
 })
+router.put('/user/adminupdate/:id', auth.verifyAdmin,(req,res)=>{
+    const id=req.body.id
+    const name=req.body.name
+    const phone=req.body.phone
+    const address=req.body.address
+    const email=req.body.email
 
+
+    console.log(name)
+  
+    UserRegistration.updateOne({_id:id},{name:name, phone:phone, address:address, email:email}).then(function(){
+        res.status(200).json({success:true,msg:"Succesfully Updated"})
+    }).catch(function(e){
+        res.status(500).json({success:false})
+    })
+  })
 //user logout
 router.delete('/logout/user', auth.verifyUser, function(req,res){
   
