@@ -10,9 +10,12 @@ var ObjectID = require('mongodb').ObjectID;
 router.post('/checkout', function(req, res){
 
     const checkoutdata = {
-        user_id: ObjectID(req.body.userId),
+        userId: ObjectID(req.body.userId),
         products : req.body.products
     }
+
+    console.log(checkoutdata)
+    // console.log(checkoutdata)
     const Add = new Checkout(
         checkoutdata)
     Add.save().then(function () {
@@ -20,6 +23,7 @@ router.post('/checkout', function(req, res){
     }).catch(function (e) {
         res.send(e)
     })
+    console.log(Add)
 })
 
 

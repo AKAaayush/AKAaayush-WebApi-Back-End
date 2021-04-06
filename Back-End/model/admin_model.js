@@ -12,6 +12,10 @@ const admin = new mongoose.Schema( {
         type: String,
         trim: true
     },
+    phone: {
+        type: String,
+        trim: true
+    },
 
     email: {
         type: String,
@@ -24,6 +28,12 @@ const admin = new mongoose.Schema( {
         require: true,
         trim: true
     },
+    image:{
+        type:String,
+        trim:true,
+        default:'pending'
+    },
+
 
     tokens: [{
         token: {

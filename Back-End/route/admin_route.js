@@ -5,6 +5,8 @@ const {check, validationResult} = require('express-validator');
 const jwt = require('jsonwebtoken');
 const Admin = require('../model/admin_model');
 const auth = require('../middleware/auth');
+var ObjectID = require('mongodb').ObjectID; 
+const upload = require ('../middleware/upload');
 
 
 // Add Admin
@@ -30,11 +32,13 @@ function(req,res){
         const name = req.body.name
         const address = req.body.address
         const email = req.body.email
+        const phone = req.body.phone
+
         const password = req.body.password
 
         bcrypt.hash(password,10, function(err, hash){
             console.log(hash)
-            const me = new Admin({name : name,  address:address,  email:email, password:hash});
+            const me = new Admin({name : name,  address:address,  email:email, password:hash,phone:phone});
             me.save()
             .then(function(result){
                 // success insert
@@ -138,10 +142,13 @@ router.post('/admin/login', async function (req, res) {
         id: Users._id
       })
     }
+    
     catch(e){
+      const token = ""
       res.status(200).json({
         success:false,
-        message:"invalid credential"
+        message:"invalid credential",
+        token:token
       })
     }
   })
@@ -203,6 +210,37 @@ router.delete('/logout/admin', auth.verifyAdmin, function(req,res){
     })
 })
 })
+
+// Update Admin user
+router.put('/user/updateadmin/:_id',auth.verifyAdmin, function(req,res){
+  console.log(req.body);
+  console.log(req.params._id)
+  Admin.findOneAndUpdate({_id:ObjectID(req.params._id)}, req.body).then(function () {
+      res.status(200).send().catch(function (e) {
+          res.status(400).send()
+      })
+  })
+
+  })
+
+  // Update Image
+ router.put('/updateAdminProfile/:_id',auth.verifyAdmin,upload.single('image'),function(req,res){
+  try{
+        const User = {
+            image: req.file.filename
+        }
+        Admin.findOneAndUpdate({_id:ObjectID(req.params._id)}, User).then(function () {
+            res.status(200).send().catch(function (e) {
+                res.status(400).send()
+            })
+        })
+      }
+      catch{
+        console.log("profile pic not updated")
+  
+      }
+    
+  })
 //admin logout
 // router.delete('/logout')
 module.exports = router;

@@ -137,11 +137,11 @@ router.post('/user/login', async function (req, res) {
         })
       }
       catch(e){
-        const token = ""
+        // const token = ""
         res.status(200).json({
           success:false,
           message:"invalid credential",
-          token: token
+        //   token: token
         })
       }
     })

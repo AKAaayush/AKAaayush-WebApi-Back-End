@@ -1,5 +1,5 @@
 const mongoose = require('mongoose') // database connection
-
+var now = new Date();
 //attributes of database and create model
 const table = mongoose.model('Table', {     
     user_id :{
@@ -14,11 +14,7 @@ const table = mongoose.model('Table', {
         require:true,
         trim: true
     },  
-    //  table: {
-    //     type: String,
-    //     require:true,
-    //     trim: true
-    // },
+
     people: {
         type: String,
         require:true,
@@ -28,6 +24,10 @@ const table = mongoose.model('Table', {
     date:{
         type: String,
         trim: true
+    },
+    currentdate:{
+        type : Date, 
+        default: now 
     },
 
     time:{
