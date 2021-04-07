@@ -16,17 +16,13 @@ router.post('/admin/add',
     check('email', "Invalid Emial Address ").isEmail(),
     check('name', "You must enter name").not().isEmpty(),
     check('address', "You must enter Address").not().isEmpty()
-],
+], auth.verifyAdmin,
 function(req,res){
     const  errors = validationResult(req)
     console.log(errors.array())
     if(!errors.isEmpty()){
         res.status(400).json(errors.array())
     }
-    // if (!errors.isEmail()) {
-    //     res.status(400).json(errors.array())
-        
-    // }
      else {
         
         const name = req.body.name
@@ -56,78 +52,7 @@ function(req,res){
     }
 })
 
-//admin login
-// router.post('/admin/login',function(req,res){
-//   const email = req.body.email
-//   const password = req.body.password
-//   // console.log(req.body.email)
-
-//   Admin.findOne({email : email})
-//   .then(function(AdminData){
-//       if(AdminData==null){
-//           return res.status(403).json({message : "Invalid User!!"})
-//       }
-//       bcrypt.compare(password,AdminData.password, function(err, result){
-//           if(result==false){
-//               const token = ""  
-//               console.log(token)  
-//               return res.status(201).json({success:false,message : "Invalid User!!", token: token}) 
-                  
-//             }
-//           //   res.send("authenticated!!!")
-
-//  const token = jwt.sign({adminId :AdminData._id},'secretkey' );
-//           res.status(200).json({
-//               success: true,
-//               message: "login success",
-//               token : token,
-//               id:AdminData._id
-//           })
-//           // console.log("HERE")
-
-//       })
-      
-//   })
-//   .catch(function(e){
-//       res.send(e)
-//   })
-  
-
-// })
-// router.post('/admin/login', function (req, res) {
-//   const email = req.body.email
-//   const password = req.body.password
-
-//   Admin.findOne({ email: email })
-//     .then(function (userData) {
-//       if(userData==null){
-//         console.log("Invalid User")
-//           return res.status(403).json({success: false, message : "Invalid User!!"})
-          
-//       }
-//       bcrypt.compare(password, userData.password, function (err, result) {
-//         if (result == false) {
-//           const token= "";
-//           return res.status(403).json({ success: false, message: "Invalid Admin!!", token:token })
-//         }
-//         //   res.send("authenticated!!!")
-//         const token = jwt.sign({ userId: userData._id }, 'secretkey');
-//         console.log(userData._id)
-//         res.status(200).json({
-//           success: true,
-//           message: "admin login success",
-//           token: token,
-//           id: userData._id
-//         })
-
-//       })
-
-//     })
-//     .catch()
-
-
-
-// })
+//admin login 
 router.post('/admin/login', async function (req, res) {
   try{
     const email = req.body.email
@@ -152,8 +77,8 @@ router.post('/admin/login', async function (req, res) {
       })
     }
   })
-
-router.put('/admin/update', function(req,res){
+// admin update
+router.put('/admin/update',auth.verifyAdmin, function(req,res){
     const name = req.body.name
     const address = req.body.address
     const email = req.body.email
@@ -182,13 +107,9 @@ router.put('/admin/update', function(req,res){
     // res.send(req.data)
    
         res.send(req.user)
-    
-    
-
-
 })
 
-//user logout
+//admin logout
 router.delete('/logout/admin', auth.verifyAdmin, function(req,res){
   
   Admin.findById(req.user._id, function(err, userdata){

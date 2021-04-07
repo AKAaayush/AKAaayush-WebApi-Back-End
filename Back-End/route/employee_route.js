@@ -49,7 +49,7 @@ router.get('/employee/display', function(req,res){
 })
 
 // eployee single
-router.get('/employee/single/:id', function(req,res){
+router.get('/employee/single/:id',auth.verifyAdmin, function(req,res){
     const id = req.params.id;  
     employeeadd.findOne({_id : id })
     .then(function(data){
@@ -63,7 +63,7 @@ router.get('/employee/single/:id', function(req,res){
 })
 
 //Employee Update
-router.put('/employee/update/:id', upload.single('employee_image'), function(req,res){
+router.put('/employee/update/:id',auth.verifyAdmin, upload.single('employee_image'), function(req,res){
     const employee_name = req.body.employee_name
     const employee_phone = req.body.employee_phone
     const employee_address = req.body.employee_address
@@ -87,7 +87,7 @@ router.put('/employee/update/:id', upload.single('employee_image'), function(req
     })
 })
    //delete food details
-   router.delete('/employee/delete/:id',function(req, res){
+   router.delete('/employee/delete/:id',auth.verifyAdmin,function(req, res){
     const id = req.params.id
     employeeadd.deleteOne({_id:id})
     .then(function(result){

@@ -2,12 +2,11 @@ const express = require('express');
 const router = express.Router();
 const Checkout = require('../model/checkout_model');
 const auth = require("../middleware/auth")
-const { check, validationResult } = require('express-validator');
-const { json } = require('body-parser');
+// const auth = require("../middleware/auth")
 var ObjectID = require('mongodb').ObjectID; 
 
 
-router.post('/checkout', function(req, res){
+router.post('/checkout', auth.verifyUser, function(req, res){
 
     const checkoutdata = {
         userId: ObjectID(req.body.userId),

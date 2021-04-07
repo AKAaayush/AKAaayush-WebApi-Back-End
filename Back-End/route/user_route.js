@@ -25,10 +25,7 @@ function(req,res){
     if(!errors.isEmpty()){
         res.status(400).json(errors.array())
     }
-    // if (!errors.isEmail()) {
-    //     res.status(400).json(errors.array())
-        
-    // }
+
      else {
         
         const name = req.body.name
@@ -82,45 +79,6 @@ router.get('/checkuserlogin',auth.verifyUser, async function(req,res) {
 
 
 })
-
-// router.post('/user/login', function (req, res) {
-//     const email = req.body.email
-//     const password = req.body.password
-  
-//     UserRegistration.findOne({ email: email })
-//       .then(function (userData) {
-//         if(userData==null){
-//           console.log("Invalid User")
-//             return res.status(403).json({success: false, message : "Invalid User!!"})
-            
-//         }
-//         bcrypt.compare(password, userData.password, function (err, result) {
-//           if (result == false) {
-//             const token= "";
-//             return res.status(403).json({ success: false, message: "Invalid Admin!!", token:token })
-//           }
-//           //   res.send("authenticated!!!")
-//           const token = jwt.sign({ userId: userData._id }, 'secretkey');
-//           console.log(userData._id)
-//           res.status(200).json({
-//             success: true,
-//             message: " login success",
-//             token: token,
-//             id: userData._id
-//           })
-  
-//         })
-  
-//       })
-//       .catch(function(e){
-//         console.log("Invalid User")
-
-//       })
-  
-  
-  
-//   })
-
 
 router.post('/user/login', async function (req, res) {
     try{
@@ -196,7 +154,7 @@ try{
 })
 
 //get one user by _id
-router.get('/user/display/:id', function(req, res){
+router.get('/user/display/:id',auth.verifyAdmin, function(req, res){
     console.log("In api")
     const id = req.params.id
     console.log(req.params.id)

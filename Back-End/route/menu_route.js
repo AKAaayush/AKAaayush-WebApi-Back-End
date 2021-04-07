@@ -6,16 +6,14 @@ const auth = require('../middleware/auth')
 
 //adding menu
 // upload.single('menu_image')
-router.post('/addmenu', upload.single('menu_image'),function(req, res) {
+router.post('/addmenu', auth.verifyAdmin,upload.single('menu_image'),function(req, res) {
 
     const menu_name = req.body.menu_name
     const menu_title = req.body.menu_title
     const menu_price = req.body.menu_price
     const menu_desc = req.body.menu_desc
-    const menu_image = req.body.menu_image
 
     const menu = new menuAdd({menu_name : menu_name, menu_title: menu_title, menu_price:menu_price, menu_desc:menu_desc,menu_image : req.file.filename })
-    // menu_image : req.file.filename
     menu.save()
 
     .then(function(result){
@@ -47,7 +45,7 @@ router.get('/menu/display', function(req,res){
     
     })
 
-    router.get('/menu/single/:id', function(req,res){
+    router.get('/menu/single/:id',auth.verifyAdmin, function(req,res){
       const id = req.params.id;  
       menuAdd.findOne({_id : id })
       .then(function(data){
@@ -76,12 +74,11 @@ router.get('/menu/display', function(req,res){
 
 
     //MENU EDIT
-    router.put('/menu/update/:id',upload.single('menu_image'), function(req,res){
+    router.put('/menu/update/:id',auth.verifyAdmin,upload.single('menu_image'), function(req,res){
       const menu_name = req.body.menu_name
       const menu_price = req.body.menu_price
       const menu_desc = req.body.menu_desc
       const menu_title = req.body.menu_title
-      const menu_image = req.body.menu_image
       const id = req.params.id
       console.log(id)
 
@@ -100,11 +97,10 @@ router.get('/menu/display', function(req,res){
     })
 
     //delete menu details
-    router.delete('/menu/delete/:id',function(req, res){
+    router.delete('/menu/delete/:id',auth.verifyAdmin,function(req, res){
       const id = req.params.id
       menuAdd.deleteOne({_id:id})
-      // const menu = menuAdd.findById(req.params.id)
-      // menu.remove()
+     
       .then(function(result){
         console.log("Deleted!!")
         res.status(200).json({a : "deleted successfully", success : true});
