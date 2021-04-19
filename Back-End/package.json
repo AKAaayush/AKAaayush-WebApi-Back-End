@@ -24,7 +24,7 @@
   "scripts": {
     "test": "jest"
 
-  },
+  }, 
   "author": "Aayush Shrestha",
   "license": "ISC"
 }

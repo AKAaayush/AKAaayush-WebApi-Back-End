@@ -1,5 +1,5 @@
 // use the path of your model
-const CheckOut = require('../model/checkout_model');
+const AddFav = require('../model/checkout_model');
 const mongoose = require('mongoose');
 const url = 'mongodb://127.0.0.1:27017/RMS';
 beforeAll(async () => {
@@ -11,7 +11,7 @@ beforeAll(async () => {
 afterAll(async () => {
     await mongoose.connection.close();
 });
-describe('Register Schema test anything', () => {
+describe('Checkout Schema test anything', () => {
     // the code below is for insert testing
     it('Checkout testing anything', () => {
         const check = {
@@ -27,7 +27,7 @@ describe('Register Schema test anything', () => {
     });
 
     it('to test the update', async () => {
-        return AddFav.findOneAndUpdate({ _id: Object('607cf5e4336ac542acefbc18') },
+        return AddFav.findOneAndUpdate({ _id: Object('607cf768c965a24120035ca8') },
             { $set: { userId: 'test' } })
             .then((pp) => {
                 expect(pp.userId).toEqual('test')
@@ -36,7 +36,7 @@ describe('Register Schema test anything', () => {
     });
     // the code below is for delete testing
     it('to test the delete user is working or not', async () => {
-        const status = await AddFav.deleteOne({_id:"607cf5e4336ac542acefbc18"});
+        const status = await AddFav.deleteOne({_id:"607cf965d43a3d29b8a6e36c"});
         expect(status.ok).toBe(1);
     })
 

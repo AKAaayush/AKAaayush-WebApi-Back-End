@@ -160,13 +160,30 @@ router.put('/updateProfile/:_id', auth.verifyUser, upload.single('image'), funct
 
 })
 
-//get one user by _id
+//get one user by _id for Android
 router.get('/user/display/:id', auth.verifyUser, function (req, res) {
   console.log("In api")
   const id = req.params.id
   console.log(req.params.id)
 
   UserRegistration.find({ _id: id })
+    .then(function (data) {
+      res.status(200).json({ success: true, data: data });
+      console.log(data)
+    })
+
+    .catch(function (e) {
+      res.status(200).json({ success: false, message: "Error" })
+    })
+})
+
+// for Web Applicaion
+router.get('/user/display/api/:id', auth.verifyAdmin, function (req, res) {
+  console.log("In api")
+  const id = req.params.id
+  console.log(req.params.id)
+
+  UserRegistration.findOne({ _id: id })
     .then(function (data) {
       res.status(200).json({ success: true, data: data });
       console.log(data)
@@ -241,9 +258,6 @@ router.delete('/user/logout', function (req, res) {
 
 
 //  android
-
-
-
 router.put('/user/update', auth.verifyUser, (req, res) => {
   const id = req.body._id
   const name = req.body.name

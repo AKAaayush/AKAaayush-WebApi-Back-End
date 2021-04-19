@@ -21,7 +21,7 @@ describe('Register Schema test anything', () => {
             'phone':'5473859385',
             'gender':'male',
             'dob':'5451515',
-            'email': 'dummy33421d344@gmail.com',
+            'email': 'dsassasa@gmail.com',
             'password': "dummy",
             'image': 'noimg'
         };
@@ -42,7 +42,7 @@ describe('Register Schema test anything', () => {
     });
     // the code below is for delete testing
     it('to test the delete user is working or not', async () => {
-        const status = await Admin.deleteOne({_id: '607cf38fb3c2714b30bd629a'});
+        const status = await Admin.deleteOne({_id: '607cf96563e5374858465852'});
         expect(status.ok).toBe(1);
     })
 })

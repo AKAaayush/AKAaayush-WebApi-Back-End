@@ -21,14 +21,6 @@ const foodItem = mongoose.model('FoodDetails', {
      
     },
 
-    // foodID : {
-    //     type : String,
-    //     require: true
-    // }
-    // userId:{
-    //     type:String,
-    //     required:true
-    // }
   
 }
 
