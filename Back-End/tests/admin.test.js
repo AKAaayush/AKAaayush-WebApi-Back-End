@@ -1,5 +1,5 @@
 // use the path of your model
-const Register = require('../model/user_model');
+const Admin = require('../model/admin_model');
 const mongoose = require('mongoose');
 // use the new name of the database
 const url = 'mongodb://127.0.0.1:27017/RMS';
@@ -21,19 +21,19 @@ describe('Register Schema test anything', () => {
             'phone':'5473859385',
             'gender':'male',
             'dob':'5451515',
-            'email': 'dummy33421d34ds4@gmail.com',
+            'email': 'dummy33421d344@gmail.com',
             'password': "dummy",
             'image': 'noimg'
         };
 
-        return Register.create(user)
+        return Admin.create(user)
             .then((pro_ret) => {
                 expect(pro_ret.name).toEqual('dummy name');
             });
     })
 
     it('to test the update', async () => {
-        return Register.findOneAndUpdate({ _id: Object('607cf32d69f60b4a30316ff6') },
+        return Admin.findOneAndUpdate({ _id: Object('607cf38fb3c2714b30bd629a') },
             { $set: { name: 'dummy name' } })
             .then((pp) => {
                 expect(pp.name).toEqual('dummy name')
@@ -42,7 +42,7 @@ describe('Register Schema test anything', () => {
     });
     // the code below is for delete testing
     it('to test the delete user is working or not', async () => {
-        const status = await Register.deleteOne({_id: '607cf32d69f60b4a30316ff6'});
+        const status = await Admin.deleteOne({_id: '607cf38fb3c2714b30bd629a'});
         expect(status.ok).toBe(1);
     })
 })

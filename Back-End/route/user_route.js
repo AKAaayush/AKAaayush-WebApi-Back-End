@@ -217,6 +217,7 @@ router.delete('/logout/user', auth.verifyUser, function (req, res) {
       })
     })
     return res.send({
+    
       success: true,
       message: "Logged Out",
 
