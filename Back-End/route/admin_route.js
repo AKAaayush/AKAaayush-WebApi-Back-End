@@ -77,6 +77,33 @@ router.post('/admin/login', async function (req, res) {
       })
     }
   })
+
+  // display all admin
+  router.get('/admin/display',auth.verifyAdmin, function (req, res) {
+
+    Admin.find().then(function (data) {
+      res.send(data)
+  
+    })
+  })
+
+  // to Delete admin
+  router.delete('/admin/delete/:id', auth.verifyAdmin, function (req, res) {
+    const id = req.params.id
+    Admin.deleteOne({ _id: id })
+      .then(function (result) {
+        console.log("Deleted!!")
+        res.status(200).json({ a: "deleted successfully", success: true });
+  
+  
+      })
+      .catch(function (err) {
+        console.log("here")
+        res.status(500).json({ message: err })
+      })
+  
+  })
+
 // admin update
 router.put('/admin/update',auth.verifyAdmin, function(req,res){
     const name = req.body.name
