@@ -124,7 +124,7 @@ router.put('/user/update/:_id', auth.verifyUser, function (req, res) {
 
 
 
-//delete food details
+//delete User details
 router.delete('/user/delete/:id', auth.verifyAdmin, function (req, res) {
   const id = req.params.id
   UserRegistration.deleteOne({ _id: id })
