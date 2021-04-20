@@ -36,7 +36,7 @@ describe('Checkout Schema test anything', () => {
     });
     // the code below is for delete testing
     it('to test the delete user is working or not', async () => {
-        const status = await AddFav.deleteOne({_id:"607cf965d43a3d29b8a6e36c"});
+        const status = await AddFav.deleteOne({_id:"607cf768c965a24120035ca8"});
         expect(status.ok).toBe(1);
     })
 

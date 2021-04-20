@@ -1,0 +1,42 @@
+[{
+  "_id": {
+    "$oid": "6069a19ab8e50c257c8013ba"
+  },
+  "name": "Aayush",
+  "address": "KTM",
+  "email": "aayush@gmail.com",
+  "password": "$2a$10$k/tLnUQOWhcsNfvrYMLNkeYY1LwVZIUepoWGOhioEehh24A.aP3pS",
+  "__v": 2,
+  "image": "pending"
+},{
+  "_id": {
+    "$oid": "6069a4d44849c45554cfbd95"
+  },
+  "name": "Aayush",
+  "address": "KTM",
+  "email": "aakash@gmail.com",
+  "password": "$2a$10$3Xu15wXGTVxZRE0Z6lfHUeUMYIEicfPKfWi9sNwppkuDKmeNfrQWu",
+  "__v": 43
+},{
+  "_id": {
+    "$oid": "6069c3c1b2eaf1229047e30c"
+  },
+  "name": "Aayush Shresthah",
+  "address": "ktm12",
+  "email": "Aayush@gmail.com",
+  "password": "$2a$10$O2ALV1HWb.BXquA9SVBtfOjgbbpYikU19eJmjCfPq9ZMv2ZIJT6aW",
+  "__v": 95,
+  "phone": "19863858330",
+  "image": "1617732872791aa.jpg"
+},{
+  "_id": {
+    "$oid": "607cfa9066d2f04edccb9032"
+  },
+  "image": "noimg",
+  "name": "dummy name",
+  "address": "KTM",
+  "phone": "5473859385",
+  "email": "dsassasa@gmail.com",
+  "password": "dummy",
+  "__v": 0
+}]

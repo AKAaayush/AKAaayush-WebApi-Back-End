@@ -29,7 +29,7 @@ describe('Menu Schema test anything', () => {
     })
 
     it('to test the update', async () => {
-        return Food.findOneAndUpdate({ _id: Object('607cf9652cc8824d406a188f') },
+        return Food.findOneAndUpdate({ _id: Object('607e77eb7ad20f45384b9052') },
             { $set: { food_name: 'dummy name' } })
             .then((pp) => {
                 expect(pp.food_name).toEqual('dummy name')
@@ -38,7 +38,7 @@ describe('Menu Schema test anything', () => {
     });
     // the code below is for delete testing
     it('to test the delete user is working or not', async () => {
-        const status = await Food.deleteOne({_id: '607cf9652cc8824d406a188f'});
+        const status = await Food.deleteOne({_id: '607e77eb7ad20f45384b9052'});
         expect(status.ok).toBe(1);
     })
 })
